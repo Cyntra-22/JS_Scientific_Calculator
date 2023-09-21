@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Calculator</title>
+    <style>
+      body,
+      table {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      table {
+        border-collapse: collapse;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      td {
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        font-size: 20px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+      }
+
+      #result {
+        font-size: 24px;
+        text-align: right;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+
+      td[colspan="4"] {
+        background-color: #f2f2f2;
+      }
+
+      td:hover {
+        background-color: #e0e0e0;
+      }
+
+      td:active {
+        background-color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <body>
+      <table id="myTable">
+        <tbody>
+          <tr>
+            <td colspan="7" style="text-align: right">
+              <label id="result">0</label>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">Scientific</td>
+            <td id="Backspace">&lt;</td>
+            <td id="/">/</td>
+            <td id="*">*</td>
+            <td
+              id="-"
+              style="
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: bold;
+              "
+            >
+              -
+            </td>
+          </tr>
+          <tr>
+            <td id="sin">sin</td>
+            <td id="x">&#8730;x</td>
+            <td id="mc">mc</td>
+            <td id="7">7</td>
+            <td id="8">8</td>
+            <td id="9">9</td>
+            <td id="+" rowspan="2">+</td>
+          </tr>
+          <tr>
+            <td id="cos">cos</td>
+            <td id="squareX">x&sup2;</td>
+            <td id="mPlus">m+</td>
+            <td id="4">4</td>
+            <td id="5">5</td>
+            <td id="6">6</td>
+          </tr>
+          <tr>
+            <td id="tan">tan</td>
+            <td id="division">1/x</td>
+            <td id="mMinus">m-</td>
+            <td id="1">1</td>
+            <td id="2">2</td>
+            <td id="3">3</td>
+            <td id="Enter" rowspan="2">=</td>
+          </tr>
+          <tr>
+            <td id="pi">&#960;</td>
+            <td id="factX">x&excl;</td>
+            <td id="mR">mr</td>
+            <td id="0" colspan="2">0</td>
+            <td id="c" style="font-weight: bold">C</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <script>
+      
+        let currentValue = "0"; 
+        let operator = null; 
+        let previousValue = null;
+        let resultElement = document.getElementById("result");
+
+      
+        let cells = document.querySelectorAll("td");
+        cells.forEach((cell) => {
+          cell.addEventListener("click", handleCellClick);
+        });
+
+        function handleCellClick(event) {
+          let clickedCell = event.target;
+          let clickedValue = clickedCell.innerText;
+
+          if (!isNaN(clickedValue) || clickedValue === ".") {
+           
+            if (currentValue === "0" && clickedValue !== ".") {
+              currentValue = clickedValue;
+            } else {
+              currentValue += clickedValue;
+            }
+          } else if (clickedValue === "C") {
+            clearCalculator();
+
+          } else if (clickedValue === "=") {
+            calculateResult();
+
+          } else if (["+", "-", "*", "/"].includes(clickedValue)) {
+            if (operator !== null) {       
+              calculateResult();
+            }
+            operator = clickedValue;
+            if (currentValue !== "0") {
+              previousValue = currentValue;
+              currentValue = previousValue + " " + operator + " ";
+            }
+          } else if (clickedValue === "<") {
+            currentValue = currentValue.slice(0, -1);
+            if (currentValue === "") {
+              currentValue = "0";
+            }
+          }
+
+          
+          resultElement.innerText = currentValue;
+        }
+
+        function clearCalculator() {
+          currentValue = "0";
+          operator = null;
+          previousValue = null;
+          resultElement.innerText = currentValue;
+        }
+
+        function calculateResult() {
+          if (previousValue !== null && operator !== null) {
+            let num1 = parseFloat(previousValue);
+            let num2 = parseFloat(currentValue.split(" ")[2]); 
+            switch (operator) {
+              case "+":
+                currentValue = (num1 + num2).toString();
+                break;
+              case "-":
+                currentValue = (num1 - num2).toString();
+                break;
+              case "*":
+                currentValue = (num1 * num2).toString();
+                break;
+              case "/":
+                if (num2 === 0) {
+                  currentValue = "Error";
+                } else {
+                  currentValue = (num1 / num2).toString();
+                }
+                break;
+            }
+            operator = null;
+            previousValue = null;
+          }
+        }
+      </script>
+    </body>
+  </body>
+</html>
