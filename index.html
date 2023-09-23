@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Calculator</title>
+    <title>My Scientific Calculator</title>
     <style>
       body,
       table {
@@ -57,149 +57,251 @@
     </style>
   </head>
   <body>
-    <body>
-      <table id="myTable">
-        <tbody>
-          <tr>
-            <td colspan="7" style="text-align: right">
-              <label id="result">0</label>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="3">Scientific</td>
-            <td id="Backspace">&lt;</td>
-            <td id="/">/</td>
-            <td id="*">*</td>
-            <td
-              id="-"
-              style="
-                font-family: 'Courier New', Courier, monospace;
-                font-weight: bold;
-              "
-            >
-              -
-            </td>
-          </tr>
-          <tr>
-            <td id="sin">sin</td>
-            <td id="x">&#8730;x</td>
-            <td id="mc">mc</td>
-            <td id="7">7</td>
-            <td id="8">8</td>
-            <td id="9">9</td>
-            <td id="+" rowspan="2">+</td>
-          </tr>
-          <tr>
-            <td id="cos">cos</td>
-            <td id="squareX">x&sup2;</td>
-            <td id="mPlus">m+</td>
-            <td id="4">4</td>
-            <td id="5">5</td>
-            <td id="6">6</td>
-          </tr>
-          <tr>
-            <td id="tan">tan</td>
-            <td id="division">1/x</td>
-            <td id="mMinus">m-</td>
-            <td id="1">1</td>
-            <td id="2">2</td>
-            <td id="3">3</td>
-            <td id="Enter" rowspan="2">=</td>
-          </tr>
-          <tr>
-            <td id="pi">&#960;</td>
-            <td id="factX">x&excl;</td>
-            <td id="mR">mr</td>
-            <td id="0" colspan="2">0</td>
-            <td id="c" style="font-weight: bold">C</td>
-          </tr>
-        </tbody>
-      </table>
+    <table id="myTable">
+      <tbody>
+        <tr>
+          <td colspan="7" style="text-align: right">
+            <label id="result">0</label>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">Scientific</td>
+          <td id="Backspace">&lt;</td>
+          <td id="/">/</td>
+          <td id="*">*</td>
+          <td
+            id="-"
+            style="
+              font-family: 'Courier New', Courier, monospace;
+              font-weight: bold;
+            "
+          >
+            -
+          </td>
+        </tr>
+        <tr>
+          <td id="sin">sin</td>
+          <td id="x">&#8730;x</td>
+          <td id="mc">mc</td>
+          <td id="7">7</td>
+          <td id="8">8</td>
+          <td id="9">9</td>
+          <td id="+" rowspan="2">+</td>
+        </tr>
+        <tr>
+          <td id="cos">cos</td>
+          <td id="squareX">x&sup2;</td>
+          <td id="mPlus">m+</td>
+          <td id="4">4</td>
+          <td id="5">5</td>
+          <td id="6">6</td>
+        </tr>
+        <tr>
+          <td id="tan">tan</td>
+          <td id="division">1/x</td>
+          <td id="mMinus">m-</td>
+          <td id="1">1</td>
+          <td id="2">2</td>
+          <td id="3">3</td>
+          <td id="Enter" rowspan="2">=</td>
+        </tr>
+        <tr>
+          <td id="pi">&#960;</td>
+          <td id="factX">x&excl;</td>
+          <td id="mR">mr</td>
+          <td id="0" colspan="2">0</td>
+          <td id="c" style="font-weight: bold">C</td>
+        </tr>
+      </tbody>
+    </table>
 
-      <script>
-      
-        let currentValue = "0"; 
-        let operator = null; 
-        let previousValue = null;
-        let resultElement = document.getElementById("result");
+    <script>
+      let currentValue = "0";
+      let operator = null;
+      let previousValue = null;
+      let resultElement = document.getElementById("result");
 
-      
-        let cells = document.querySelectorAll("td");
-        cells.forEach((cell) => {
-          cell.addEventListener("click", handleCellClick);
-        });
+      let cells = document.querySelectorAll("td");
+      cells.forEach((cell) => {
+        cell.addEventListener("click", handleCellClick);
+      });
 
-        function handleCellClick(event) {
-          let clickedCell = event.target;
-          let clickedValue = clickedCell.innerText;
+      // Handle keyboard input
+      document.addEventListener("keydown", handleKeyPress);
 
-          if (!isNaN(clickedValue) || clickedValue === ".") {
-           
-            if (currentValue === "0" && clickedValue !== ".") {
-              currentValue = clickedValue;
-            } else {
-              currentValue += clickedValue;
-            }
-          } else if (clickedValue === "C") {
-            clearCalculator();
-
-          } else if (clickedValue === "=") {
-            calculateResult();
-
-          } else if (["+", "-", "*", "/"].includes(clickedValue)) {
-            if (operator !== null) {       
-              calculateResult();
-            }
-            operator = clickedValue;
-            if (currentValue !== "0") {
-              previousValue = currentValue;
-              currentValue = previousValue + " " + operator + " ";
-            }
-          } else if (clickedValue === "<") {
-            currentValue = currentValue.slice(0, -1);
-            if (currentValue === "") {
-              currentValue = "0";
-            }
+      function handleKeyPress(event) {
+        const key = event.key;
+        if (
+          !isNaN(key) ||
+          key === "." ||
+          key === "+" ||
+          key === "-" ||
+          key === "*" ||
+          key === "/"
+        ) {
+          // If a valid key is pressed, trigger the corresponding button click
+          const targetId = key === "*" ? "*" : key; // Handle the "*" key separately
+          const target = document.getElementById(targetId);
+          if (target) {
+            target.click();
           }
-
-          
-          resultElement.innerText = currentValue;
+        } else if (key === "=" || key === "Enter") {
+          // Handle the Enter key as "="
+          const target = document.getElementById("Enter");
+          if (target) {
+            target.click();
+          }
+        } else if (key === "Backspace") {
+          // Handle the Backspace key
+          const target = document.getElementById("Backspace");
+          if (target) {
+            target.click();
+          }
+        } else if (key === "c" || key === "C") {
+          // Handle the "C" key as clear
+          const target = document.getElementById("c");
+          if (target) {
+            target.click();
+          }
+        } else if (key === "<") {
+          // Handle the "<" key as backspace
+          const target = document.getElementById("Backspace");
+          if (target) {
+            target.click();
+          }
+        } else {
+          // Handle scientific functions
+          handleScientificFunctions(key);
         }
+      }
 
-        function clearCalculator() {
-          currentValue = "0";
+      function handleScientificFunctions(func) {
+        switch (func.toLowerCase()) {
+          case "s":
+            // Handle "s" for sin
+            currentValue = Math.sin(parseFloat(currentValue)).toString();
+            break;
+          case "cos":
+            // Handle "c" for cos0
+            currentValue = Math.cos(parseFloat(currentValue)).toString();
+            break;
+          case "t":
+            // Handle "t" for tan
+            currentValue = Math.tan(parseFloat(currentValue)).toString();
+            break;
+          case "r":
+            // Handle "r" for square root
+            currentValue = Math.sqrt(parseFloat(currentValue)).toString();
+            break;
+          case "q":
+            // Handle "q" for square
+            currentValue = (parseFloat(currentValue) ** 2).toString();
+            break;
+          case "p":
+            // Handle "p" for pi
+            currentValue = Math.PI.toString();
+            break;
+          case "x":c
+            // Handle "x" for 1/x
+            currentValue = (1 / parseFloat(currentValue)).toString();
+            break;
+          case "f":
+            // Handle "f" for factorial
+            currentValue = factorial(parseFloat(currentValue)).toString();
+            break;
+          case "m":
+            // Handle "m" for memory functions
+            handleMemoryFunctions();
+            break;
+        }
+        resultElement.innerText = currentValue;
+      }
+
+      function factorial(num) {
+        if (num === 0) {
+          return "1";
+        }
+        let result = 1;
+        for (let i = 1; i <= num; i++) {
+          result *= i;
+        }
+        return result.toString();
+      }
+
+      function handleCellClick(event) {
+        let clickedCell = event.target;
+        let clickedValue = clickedCell.innerText;
+
+        if (!isNaN(clickedValue) || clickedValue === ".") {
+          if (currentValue === "0" && clickedValue !== ".") {
+            currentValue = clickedValue;
+          } else {
+            currentValue += clickedValue;
+          }
+        } else if (clickedValue === "C") {
+          clearCalculator();
+        } else if (clickedValue === "=") {
+          calculateResult();
+        } else if (["+", "-", "*", "/"].includes(clickedValue)) {
+          if (operator !== null) {
+            calculateResult();
+          }
+          operator = clickedValue;
+          if (currentValue !== "0") {
+            previousValue = currentValue;
+            currentValue = previousValue + " " + operator + " ";
+          }
+        } else if (clickedValue === "<") {
+          currentValue = currentValue.slice(0, -1);
+          if (currentValue === "") {
+            currentValue = "0";
+          }
+        } else {
+          // Handle scientific functions
+          handleScientificFunctions(clickedValue);
+        }
+        resultElement.innerText = currentValue;
+      }
+
+      function clearCalculator() {
+        currentValue = "0";
+        operator = null;
+        previousValue = null;
+        resultElement.innerText = currentValue;
+      }
+
+      function calculateResult() {
+        if (previousValue !== null && operator !== null) {
+          let num1 = parseFloat(previousValue);
+          let num2 = parseFloat(currentValue.split(" ")[2]);
+          switch (operator) {
+            case "+":
+              currentValue = (num1 + num2).toString();
+              break;
+            case "-":
+              currentValue = (num1 - num2).toString();
+              break;
+            case "*":
+              currentValue = (num1 * num2).toString();
+              break;
+            case "/":
+              if (num2 === 0) {
+                currentValue = "Error";
+              } else {
+                currentValue = (num1 / num2).toString();
+              }
+              break;
+          }
           operator = null;
           previousValue = null;
-          resultElement.innerText = currentValue;
         }
+        resultElement.innerText = currentValue;
+      }
 
-        function calculateResult() {
-          if (previousValue !== null && operator !== null) {
-            let num1 = parseFloat(previousValue);
-            let num2 = parseFloat(currentValue.split(" ")[2]); 
-            switch (operator) {
-              case "+":
-                currentValue = (num1 + num2).toString();
-                break;
-              case "-":
-                currentValue = (num1 - num2).toString();
-                break;
-              case "*":
-                currentValue = (num1 * num2).toString();
-                break;
-              case "/":
-                if (num2 === 0) {
-                  currentValue = "Error";
-                } else {
-                  currentValue = (num1 / num2).toString();
-                }
-                break;
-            }
-            operator = null;
-            previousValue = null;
-          }
-        }
-      </script>
-    </body>
+      function handleMemoryFunctions() {
+        // Implement memory functions (mc, m+, m-, mr) here
+        // You can use additional variables to store memory values
+      }
+    </script>
   </body>
 </html>
