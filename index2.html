@@ -116,6 +116,7 @@
     </table>
 
     <script>
+
       let currentValue = "0";
       let operator = null;
       let previousValue = null;
@@ -169,7 +170,64 @@
           if (target) {
             target.click();
           }
+        } else {
+          // Handle scientific functions
+          handleScientificFunctions(key);
         }
+      }
+
+      function handleScientificFunctions(func) {
+        switch (func.toLowerCase()) {
+          case "s":
+            // Handle "s" for sin
+            currentValue = Math.sin(parseFloat(currentValue)).toString();
+            break;
+          case "cos":
+            // Handle "c" for cos0
+            currentValue = Math.cos(parseFloat(currentValue)).toString();
+            break;
+          case "t":
+            // Handle "t" for tan
+            currentValue = Math.tan(parseFloat(currentValue)).toString();
+            break;
+          case "r":
+            // Handle "r" for square root
+            currentValue = Math.sqrt(parseFloat(currentValue)).toString();
+            break;
+          case "q":
+            // Handle "q" for square
+            currentValue = (parseFloat(currentValue) ** 2).toString();
+            break;
+          case "p":
+            // Handle "p" for pi
+            currentValue = Math.PI.toString();
+            break;
+          case "x":
+            c;
+            // Handle "x" for 1/x
+            currentValue = (1 / parseFloat(currentValue)).toString();
+            break;
+          case "f":
+            // Handle "f" for factorial
+            currentValue = factorial(parseFloat(currentValue)).toString();
+            break;
+          case "m":
+            // Handle "m" for memory functions
+            handleMemoryFunctions();
+            break;
+        }
+        resultElement.innerText = currentValue;
+      }
+
+      function factorial(num) {
+        if (num === 0) {
+          return "1";
+        }
+        let result = 1;
+        for (let i = 1; i <= num; i++) {
+          result *= i;
+        }
+        return result.toString();
       }
 
       function handleCellClick(event) {
@@ -200,6 +258,9 @@
           if (currentValue === "") {
             currentValue = "0";
           }
+        } else {
+          // Handle scientific functions
+          handleScientificFunctions(clickedValue);
         }
         resultElement.innerText = currentValue;
       }
@@ -236,7 +297,13 @@
           operator = null;
           previousValue = null;
         }
+        resultElement.innerText = currentValue;
       }
-    </script>
+
+      function handleMemoryFunctions() {
+        // Implement memory functions (mc, m+, m-, mr) here
+        // You can use additional variables to store memory values
+      }
+    </script> 
   </body>
 </html>
